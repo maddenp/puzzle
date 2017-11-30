@@ -1,5 +1,6 @@
 (ns puzzle.core
   (:gen-class)
+  (:require [clojure.string :as str])
   (:use loco.constraints)
   (:use loco.core))
 
@@ -62,12 +63,9 @@
 
 (defn -main
   [& args]
-  (let [ss (solutions model)]
-    (doseq [s ss]
-      (println)
-      (println (str (s :00) " " (s :01) " " (s :02) " " (s :03) " " (s :04) " " (s :05)))
-      (println (str (s :10) " " (s :11) " " (s :12) " " (s :13) " " (s :14) " " (s :15)))
-      (println (str (s :20) " " (s :21) " " (s :22) " " (s :23) " " (s :24) " " (s :25)))
-      (println (str (s :30) " " (s :31) " " (s :32) " " (s :33) " " (s :34) " " (s :35)))
-      (println (str (s :40) " " (s :41) " " (s :42) " " (s :43) " " (s :44) " " (s :45)))
-      (println (str (s :50) " " (s :51) " " (s :52) " " (s :53) " " (s :54) " " (s :55))))))
+  (let [digits (range 0 6)
+        rc-kws (fn [x] (map #(keyword (str x %)) digits))]
+    (doseq [solution (solutions model)]
+      (let [row #(str/join " " (map solution (rc-kws %)))
+            grid (str/join "\n" (map row digits))]
+        (println (str "\n" grid "\n"))))))
